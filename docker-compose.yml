@@ -1,0 +1,29 @@
+version: "3"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Docker/WebApp/Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    container_name: mailer_app
+    links:
+      - rabbitMq
+    depends_on:
+      - rabbitMq
+  web:
+    build:
+      context: Docker/Ngnix
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "2018:80"
+  rabbitMq:
+    hostname: rabbit:rabbitmq
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin

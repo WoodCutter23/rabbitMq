@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+namespace App\Helpers;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+
+use App\Workers\RabbitListener;
+use Symfony\Component\Console\Application;
+use App\ConsoleCommands\RabbitDeamonCommand;
+
+$app = new Application();
+$app->add(new RabbitDeamonCommand(new RabbitListener(new Mail()), new RabbitMqConnection()));
+$app->run();
